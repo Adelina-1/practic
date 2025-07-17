@@ -1,34 +1,42 @@
 #include <iostream>
 using namespace std;
 
-// Проверка на арифметическую прогрессию
-bool isArithmeticProgression(int a, int b, int c, int d) {
-    int d1 = b - a;
-    int d2 = c - b;
-    int d3 = d - c;
-    return (d1 == d2) && (d2 == d3);
-}
-
 int main() {
+    int n1, n2;
     char choice;
 
     do {
-        int a, b, c, d;
+        cout << "Введите N1 и N2: ";
+        cin >> n1 >> n2;
 
-        cout << "Введите 4 целых числа через пробел: ";
-        cin >> a >> b >> c >> d;
-
-        if (isArithmeticProgression(a, b, c, d)) {
-            cout << "Эти числа образуют арифметическую прогрессию." << endl;
-        } else {
-            cout << "Эти числа НЕ образуют арифметическую прогрессию." << endl;
+        if (n1 > n2) {
+            int temp = n1;
+            n1 = n2;
+            n2 = temp;
         }
 
-        cout << "Повторить? (y/n): ";
+        cout << "Подходящие числа:\n";
+
+        for (int i = n1; i <= n2; i++) {
+            int sq = i * i;
+            int copy = i;
+            int mod = 1;
+
+            // считаем, какая степень 10 нужна для остатка (например, 25 -> 100)
+            while (copy > 0) {
+                mod *= 10;
+                copy /= 10;
+            }
+
+            if (sq % mod == i) {
+                cout << i << " ";
+            }
+        }
+
+        cout << "\nПовторить? (y/n): ";
         cin >> choice;
 
     } while (choice == 'y' || choice == 'Y');
 
-    cout << "Завершение программы." << endl;
     return 0;
 }
