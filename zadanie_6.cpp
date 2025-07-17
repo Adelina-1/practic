@@ -1,34 +1,43 @@
 #include <iostream>
+#include <cmath>
+#include <string>
 using namespace std;
 
-// Проверка на арифметическую прогрессию
-bool isArithmeticProgression(int a, int b, int c, int d) {
-    int d1 = b - a;
-    int d2 = c - b;
-    int d3 = d - c;
-    return (d1 == d2) && (d2 == d3);
+string Yes(double x1, double y1, double r1, double x2, double y2, double r2) {
+    double distance = sqrt(pow(x2 - x1, 2) + pow(y2 - y1, 2));
+    
+    if (distance == 0) {
+        if (r1 == r2) {
+            return "Окружности концентрические (совпадают)";
+        } else {
+            return "Окружности концентрические (не пересекаются)";
+        }
+    } else if (distance > r1 + r2) {
+        return "Окружности не пересекаются";
+    } else if (distance == r1 + r2) {
+        return "Окружности касаются внешним образом";
+    } else if (distance < abs(r1 - r2)) {
+        return "Одна окружность содержится внутри другой без пересечений";
+    } else if (distance == abs(r1 - r2)) {
+        return "Окружности касаются внутренним образом";
+    } else {
+        return "Окружности пересекаются в двух точках";
+    }
 }
 
 int main() {
-    char choice;
-
-    do {
-        int a, b, c, d;
-
-        cout << "Введите 4 целых числа через пробел: ";
-        cin >> a >> b >> c >> d;
-
-        if (isArithmeticProgression(a, b, c, d)) {
-            cout << "Эти числа образуют арифметическую прогрессию." << endl;
-        } else {
-            cout << "Эти числа НЕ образуют арифметическую прогрессию." << endl;
-        }
-
-        cout << "Повторить? (y/n): ";
-        cin >> choice;
-
-    } while (choice == 'y' || choice == 'Y');
-
-    cout << "Завершение программы." << endl;
+    SetConsoleOutputCP(1251);
+    
+    double x1, y1, r1, x2, y2, r2;
+    
+    cout << "Введите параметры первой окружности (x y r): ";
+    cin >> x1 >> y1 >> r1;
+    
+    cout << "Введите параметры второй окружности (x y r): ";
+    cin >> x2 >> y2 >> r2;
+    
+    string result = Yes(x1, y1, r1, x2, y2, r2);
+    cout << result << endl;
+    
     return 0;
 }
