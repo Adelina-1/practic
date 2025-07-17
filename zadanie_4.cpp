@@ -27,7 +27,6 @@ int main() {
         cout << "Повторить? (y/n): ";
         cin >> choice;
 
-        
     } while (choice == 'y' || choice == 'Y');
 
     cout << "Завершение программы." << endl;
