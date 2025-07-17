@@ -1,34 +1,72 @@
 #include <iostream>
+#include <fstream>
+#include <vector>
+#include <algorithm>
 using namespace std;
 
-// Проверка на арифметическую прогрессию
-bool isArithmeticProgression(int a, int b, int c, int d) {
-    int d1 = b - a;
-    int d2 = c - b;
-    int d3 = d - c;
-    return (d1 == d2) && (d2 == d3);
+
+struct Goat {
+    int id;
+    int strength;
+};
+
+bool compareGoats(const Goat& a, const Goat& b) {
+    return a.strength > b.strength;
+}
+
+vector<Goat> processTournament(const vector<vector<int>>& matrix) {
+    int n = matrix.size();
+    vector<Goat> goats(n);
+
+    for (int i = 0; i < n; i++) {
+        goats[i].id = i + 1;  
+        goats[i].strength = 0;
+    }
+    
+    for (int i = 0; i < n; i++) {
+        for (int j = 0; j < n; j++) {
+            if (i != j) {
+                goats[i].strength += matrix[i][j];
+            }
+        }
+    }
+    
+    sort(goats.begin(), goats.end(), compareGoats);
+    
+    return goats;
+}
+
+vector<vector<int>> readMatrixFromFile(const string& filename) {
+    ifstream file(filename);
+    vector<vector<int>> matrix(7, vector<int>(7));
+    
+    if (!file.is_open()) {
+        cerr << "Не удалось открыть файл!" << endl;
+        return matrix;
+    }
+    
+    for (int i = 0; i < 7; i++) {
+        for (int j = 0; j < 7; j++) {
+            file >> matrix[i][j];
+        }
+    }
+    
+    file.close();
+    return matrix;
 }
 
 int main() {
-    char choice;
+  
+    vector<vector<int>> tournamentMatrix = readMatrixFromFile("tournament.txt");
+ 
+    vector<Goat> rankedGoats = processTournament(tournamentMatrix);
 
-    do {
-        int a, b, c, d;
-
-        cout << "Введите 4 целых числа через пробел: ";
-        cin >> a >> b >> c >> d;
-
-        if (isArithmeticProgression(a, b, c, d)) {
-            cout << "Эти числа образуют арифметическую прогрессию." << endl;
-        } else {
-            cout << "Эти числа НЕ образуют арифметическую прогрессию." << endl;
-        }
-
-        cout << "Повторить? (y/n): ";
-        cin >> choice;
-
-    } while (choice == 'y' || choice == 'Y');
-
-    cout << "Завершение программы." << endl;
+    cout << "Рейтинг козлят по силе:\n";
+    cout << "Место | Номер козленка | Сила\n";
+    cout << "----------------------------\n";
+    for (int i = 0; i < rankedGoats.size(); i++) {
+        cout << i + 1 << "\t|\t" << rankedGoats[i].id << "\t|\t" << rankedGoats[i].strength << endl;
+    }
+    
     return 0;
 }
